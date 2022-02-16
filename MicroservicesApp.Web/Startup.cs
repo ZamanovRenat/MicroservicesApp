@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.Web.Services;
+using MicroservicesApp.Web.Services.IServices;
 
 namespace MicroservicesApp.Web
 {
@@ -23,6 +25,9 @@ namespace MicroservicesApp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<IProductService, ProductService>();
+            SD.ProductAPIBase = Configuration["ServiceUrls:ProductAPI"];
+            services.AddScoped<IProductService, ProductService>();
             services.AddControllersWithViews();
         }
 

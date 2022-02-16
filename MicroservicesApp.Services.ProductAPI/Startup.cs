@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MicroservicesApp.Services.ProductAPI.DbContexts;
+using MicroservicesApp.Services.ProductAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MicroservicesApp.Services.ProductAPI
@@ -36,7 +37,7 @@ namespace MicroservicesApp.Services.ProductAPI
 
             services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

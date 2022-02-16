@@ -3,7 +3,7 @@ using MicroservicesApp.Web.Models;
 
 namespace MicroservicesApp.Web.Services.IServices
 {
-    public interface IProductService
+    public interface IProductService : IBaseService
     {
         Task<T> GetAllProductsAsync<T>(string token);
         Task<T> GetProductByIdAsync<T>(int id, string token);

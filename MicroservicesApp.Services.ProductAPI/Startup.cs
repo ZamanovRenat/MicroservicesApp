@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.Services.ProductAPI.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroservicesApp.Services.ProductAPI
 {
@@ -26,7 +28,8 @@ namespace MicroservicesApp.Services.ProductAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<ApplicationDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

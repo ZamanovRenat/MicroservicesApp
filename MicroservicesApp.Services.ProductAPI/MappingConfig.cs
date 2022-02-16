@@ -12,6 +12,9 @@ namespace MicroservicesApp.Services.ProductAPI
             {
                 config.CreateMap<ProductDto, Product>();
                 config.CreateMap<Product, ProductDto>();
+
+                //Можно применить
+                //config.CreateMap<ProductDto, Product>().ReverseMap();
             });
 
             return mappingConfig;

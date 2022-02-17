@@ -25,7 +25,6 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize]
         public async Task<object> Get()
         {
             try
@@ -46,7 +45,6 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet]
         [Route("{id}")]
         public async Task<object> Get(int id)

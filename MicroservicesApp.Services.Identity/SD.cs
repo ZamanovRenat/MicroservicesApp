@@ -50,8 +50,8 @@ namespace MicroservicesApp.Services.Identity
                     ClientId="mango",
                     ClientSecrets= { new Secret("secret".Sha256())},
                     AllowedGrantTypes = GrantTypes.Code,
-                    RedirectUris={ "https://localhost:44315/signin-oidc" },
-                    PostLogoutRedirectUris={"https://localhost:44315/signout-callback-oidc" },
+                    RedirectUris={ "https://localhost:5002/signin-oidc" },
+                    PostLogoutRedirectUris={"https://localhost:5002/signout-callback-oidc" },
                     AllowedScopes=new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

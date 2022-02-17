@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Duende.IdentityServer.Services;
 using MicroservicesApp.Services.Identity.DbContexts;
 using MicroservicesApp.Services.Identity.Initializer;
 using MicroservicesApp.Services.Identity.Models;
+using MicroservicesApp.Services.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +48,7 @@ namespace MicroservicesApp.Services.Identity
                 .AddAspNetIdentity<ApplicationUser>();
 
             services.AddScoped<IDbInitializer, DbInitializer>();
-
+            services.AddScoped<IProfileService, ProfileService>();
             builder.AddDeveloperSigningCredential();
             services.AddControllersWithViews();
         }
@@ -69,6 +71,7 @@ namespace MicroservicesApp.Services.Identity
 
             app.UseRouting();
             app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             dbInitializer.Initialize();

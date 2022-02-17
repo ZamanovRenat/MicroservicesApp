@@ -25,6 +25,7 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
         public async Task<object> Get()
         {
             try
@@ -45,6 +46,7 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpGet]
         [Route("{id}")]
         public async Task<object> Get(int id)
@@ -90,6 +92,7 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <param name="productDto"></param>
         /// <returns></returns>
+        [Authorize]
         [HttpPut]
         public async Task<object> Put([FromBody] ProductDto productDto)
         {
@@ -111,6 +114,7 @@ namespace MicroservicesApp.Services.ProductAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<object> Delete(int id)

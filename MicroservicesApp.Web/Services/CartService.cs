@@ -29,7 +29,7 @@ namespace MicroservicesApp.Web.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = SD.ProductAPIBase + "/api/cart/GetCart/" + userId,
+                Url = SD.ShoppingCartAPIBase + "/api/cart/GetCart/" + userId,
                 AccessToken = token
             });
         }

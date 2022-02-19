@@ -45,6 +45,28 @@ namespace MicroservicesApp.Web.Services
             });
         }
 
+        public async Task<T> ApplyCoupon<T>(CartDto cartDto, string token = null)
+        {
+            return await this.SendAsync<T>(new ApiRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cartDto,
+                Url = SD.ShoppingCartAPIBase + "/api/cart/ApplyCoupon",
+                AccessToken = token
+            });
+        }
+
+        public async Task<T> RemoveCoupon<T>(string userId, string token = null)
+        {
+            return await this.SendAsync<T>(new ApiRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = userId,
+                Url = SD.ShoppingCartAPIBase + "/api/cart/RemoveCoupon",
+                AccessToken = token
+            });
+        }
+
         public async Task<T> UpdateCartAsync<T>(CartDto cartDto, string token = null)
         {
             return await this.SendAsync<T>(new ApiRequest()

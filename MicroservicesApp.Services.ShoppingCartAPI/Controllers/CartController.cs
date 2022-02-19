@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.Services.ShoppingCartAPI.Messages;
 using MicroservicesApp.Services.ShoppingCartAPI.Models.Dto;
 using MicroservicesApp.Services.ShoppingCartAPI.Repository;
 
@@ -114,6 +115,31 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
             {
                 bool isSuccess = await _cartRepository.RemoveCoupon(userId);
                 _response.Result = isSuccess;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+        /// <summary>
+        /// Оформление заказа
+        /// </summary>
+        /// <param name="checkoutHeader"></param>
+        /// <returns></returns>
+        [HttpPost("Checkout")]
+        public async Task<object> Checkout(CheckoutHeaderDto checkoutHeader)
+        {
+            try
+            {
+                CartDto cartDto = await _cartRepository.GetCartByUserId(checkoutHeader.UserId);
+                if (cartDto == null)
+                {
+                    return BadRequest();
+                }
+                checkoutHeader.CartDetails = cartDto.CartDetails;
+                //Добавить логику передачи сообщения в сервис обработки заказа
             }
             catch (Exception ex)
             {

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MicroservicesApp.Services.CouponAPI.Models;
+using MicroservicesApp.Services.CouponAPI.Models.Dto;
 
 namespace MicroservicesApp.Services.CouponAPI
 {
@@ -8,7 +10,7 @@ namespace MicroservicesApp.Services.CouponAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-
+                config.CreateMap<CouponDto, Coupon>().ReverseMap();
             });
 
             return mappingConfig;

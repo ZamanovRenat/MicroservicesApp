@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.ShoppingCartAPI.DbContexts;
 using MicroservicesApp.Services.ShoppingCartAPI.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +40,7 @@ namespace MicroservicesApp.Services.ShoppingCartAPI
             services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
             services.AddControllers();
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>

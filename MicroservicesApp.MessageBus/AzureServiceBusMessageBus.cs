@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace MicroservicesApp.MessageBus
 {
-    public class AzureServiceBusMessageBus
+    public class AzureServiceBusMessageBus : IMessageBus
     {
         //Можно размести в файлах конфигурации
         private string connectionString = "Endpoint=sb://microservicesapp.servicebus.windows.net/;SharedAccessKeyName=MicroservicesAppPolitycs;SharedAccessKey=rH5UVyVGufdkoIEH3m3D2mdgX37q25/BbiW7LuidenY=;EntityPath=checkoutmessagetopic";

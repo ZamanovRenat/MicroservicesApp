@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.ShoppingCartAPI.Messages;
 using MicroservicesApp.Services.ShoppingCartAPI.Models.Dto;
 using MicroservicesApp.Services.ShoppingCartAPI.Repository;
@@ -15,11 +16,15 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;
+        private readonly IMessageBus _messageBus;
         protected ResponseDto _response;
 
-        public CartController(ICartRepository cartRepository)
+        public CartController(
+            ICartRepository cartRepository,
+            IMessageBus messageBus)
         {
             _cartRepository = cartRepository;
+            _messageBus = messageBus;
             this._response = new ResponseDto();
         }
 
@@ -140,6 +145,8 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
                 }
                 checkoutHeader.CartDetails = cartDto.CartDetails;
                 //Добавить логику передачи сообщения в сервис обработки заказа
+                await _messageBus.PublishMessage(checkoutHeader, "checkoutmessagetopic");
+
             }
             catch (Exception ex)
             {

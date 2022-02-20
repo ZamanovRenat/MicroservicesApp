@@ -48,7 +48,7 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
             //Клиент служебной шины
             var client = new ServiceBusClient(serviceBusConnectionString);
 
-            checkOutProcessor = client.CreateProcessor(checkoutMessageTopic, subScriptionCheckOut);
+            checkOutProcessor = client.CreateProcessor(checkoutMessageTopic);
             orderUpdatePaymentStatusProcessor = client.CreateProcessor(orderUpdatePaymentResultTopic, subScriptionCheckOut);
         }
         //Запуск процессора обработки сообщений из Сервисной шины Azure.

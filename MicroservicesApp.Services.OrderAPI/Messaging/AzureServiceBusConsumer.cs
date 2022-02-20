@@ -23,8 +23,11 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
         private readonly string subScriptionCheckOut;
         private readonly string checkoutMessageTopic;
         private readonly string orderPaymentProcessTopic;
+        private readonly string orderUpdatePaymentResultTopic;
+
         private ServiceBusProcessor checkOutProcessor;
-        
+        private ServiceBusProcessor orderUpdatePaymentStatusProcessor;
+
         public AzureServiceBusConsumer(
             OrderRepository orderRepository, 
             IConfiguration configuration,
@@ -41,11 +44,12 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
             subScriptionCheckOut = _configuration.GetValue<string>("SubscriptionCheckOut");
             checkoutMessageTopic = _configuration.GetValue<string>("CheckoutMessageTopic");
             orderPaymentProcessTopic = _configuration.GetValue<string>("OrderPaymentProcessTopics");
-
+            orderUpdatePaymentResultTopic = _configuration.GetValue<string>("OrderUpdatePaymentResultTopic");
             //Клиент служебной шины
             var client = new ServiceBusClient(serviceBusConnectionString);
 
             checkOutProcessor = client.CreateProcessor(checkoutMessageTopic, subScriptionCheckOut);
+            orderUpdatePaymentStatusProcessor = client.CreateProcessor(orderUpdatePaymentResultTopic, subScriptionCheckOut);
         }
         //Запуск процессора обработки сообщений из Сервисной шины Azure.
         public async Task Start()
@@ -53,11 +57,18 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
             checkOutProcessor.ProcessMessageAsync += OnCheckOutMessageReceived;
             checkOutProcessor.ProcessErrorAsync += ErrorHandler;
             await checkOutProcessor.StartProcessingAsync();
+
+            orderUpdatePaymentStatusProcessor.ProcessMessageAsync += OnOrderPaymentUpdateReceived;
+            orderUpdatePaymentStatusProcessor.ProcessErrorAsync += ErrorHandler;
+            await orderUpdatePaymentStatusProcessor.StartProcessingAsync();
         }
         public async Task Stop()
         {
             await checkOutProcessor.StopProcessingAsync();
             await checkOutProcessor.DisposeAsync();
+
+            await orderUpdatePaymentStatusProcessor.StopProcessingAsync();
+            await orderUpdatePaymentStatusProcessor.DisposeAsync();
         }
         Task ErrorHandler(ProcessErrorEventArgs args)
         {
@@ -123,6 +134,17 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
             {
                 _logger.LogInformation("Ошибка публикации сообщений о проведении платежа");
             }
+        }
+        private async Task OnOrderPaymentUpdateReceived(ProcessMessageEventArgs args)
+        {
+            var message = args.Message;
+            var body = Encoding.UTF8.GetString(message.Body);
+
+            UpdatePaymentResultMessage paymentResultMessage = JsonConvert.DeserializeObject<UpdatePaymentResultMessage>(body);
+
+            await _orderRepository.UpdateOrderPaymentStatus(paymentResultMessage.OrderId, paymentResultMessage.Status);
+            await args.CompleteMessageAsync(args.Message);
+
         }
     }
 }

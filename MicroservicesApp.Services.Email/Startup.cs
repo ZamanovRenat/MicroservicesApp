@@ -11,6 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.Services.Email.DbContexts;
+using MicroservicesApp.Services.Email.Extension;
+using MicroservicesApp.Services.Email.Messaging;
+using MicroservicesApp.Services.Email.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroservicesApp.Services.Email
 {
@@ -26,7 +31,15 @@ namespace MicroservicesApp.Services.Email
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IEmailRepository, EmailRepository>();
+
+            var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddSingleton(new EmailRepository(optionBuilder.Options));
+            services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -54,6 +67,7 @@ namespace MicroservicesApp.Services.Email
             {
                 endpoints.MapControllers();
             });
+            app.UseAzureServiceBusConsumer();
         }
     }
 }

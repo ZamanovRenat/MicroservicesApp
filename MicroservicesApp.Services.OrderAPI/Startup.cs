@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.OrderAPI.DbContexts;
 using MicroservicesApp.Services.OrderAPI.Extension;
 using MicroservicesApp.Services.OrderAPI.Messaging;
@@ -45,6 +46,8 @@ namespace MicroservicesApp.Services.OrderAPI
             services.AddSingleton(new OrderRepository(optionBuilder.Options));
 
             services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+
+            services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
 
             services.AddControllers();
 

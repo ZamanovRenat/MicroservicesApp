@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MicroservicesApp.Services.OrderAPI.DbContexts;
+using MicroservicesApp.Services.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -34,7 +35,12 @@ namespace MicroservicesApp.Services.OrderAPI
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
- 
+            
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+
+            services.AddSingleton(new OrderRepository(optionBuilder.Options));
             services.AddControllers();
 
             services.AddAuthentication("Bearer")

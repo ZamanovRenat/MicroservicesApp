@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MicroservicesApp.MessageBus;
 using MicroservicesApp.PaymentProcessor;
+using MicroservicesApp.Services.PaymentAPI.Extension;
 using MicroservicesApp.Services.PaymentAPI.Messaging;
 
 namespace MicroservicesApp.Services.PaymentAPI
@@ -59,6 +60,7 @@ namespace MicroservicesApp.Services.PaymentAPI
             {
                 endpoints.MapControllers();
             });
+            app.UseAzureServiceBusConsumer();
         }
     }
 }

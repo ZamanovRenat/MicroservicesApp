@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroservicesApp.Services.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroservicesApp.Services.Email", "MicroservicesApp.Services.Email\MicroservicesApp.Services.Email.csproj", "{66F9FFAE-E1E4-43D9-8F77-03FD2F0653F4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{E3B14A79-D41D-43A3-9489-8B285B0F84FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroservicesApp.GatewaySolution", "MicroservicesApp.GatewaySolution\MicroservicesApp.GatewaySolution.csproj", "{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +81,10 @@ Global
 		{66F9FFAE-E1E4-43D9-8F77-03FD2F0653F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66F9FFAE-E1E4-43D9-8F77-03FD2F0653F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66F9FFAE-E1E4-43D9-8F77-03FD2F0653F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +100,7 @@ Global
 		{E39A1A72-5624-4265-88F4-40FBF6D7128A} = {07EA7304-1600-4793-925C-7F258125FE47}
 		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6} = {60C3AF7A-AF57-438C-9F83-61645E7CD4A6}
 		{66F9FFAE-E1E4-43D9-8F77-03FD2F0653F4} = {60C3AF7A-AF57-438C-9F83-61645E7CD4A6}
+		{30AD0C5E-DE0A-4B7F-941E-0915613DF3DF} = {E3B14A79-D41D-43A3-9489-8B285B0F84FB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {063830C6-E884-4B24-B59E-82CD4943D4BE}

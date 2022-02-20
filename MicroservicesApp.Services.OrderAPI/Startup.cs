@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MicroservicesApp.Services.OrderAPI.DbContexts;
+using MicroservicesApp.Services.OrderAPI.Extension;
+using MicroservicesApp.Services.OrderAPI.Messaging;
 using MicroservicesApp.Services.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +43,9 @@ namespace MicroservicesApp.Services.OrderAPI
             optionBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddSingleton(new OrderRepository(optionBuilder.Options));
+
+            services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+
             services.AddControllers();
 
             services.AddAuthentication("Bearer")
@@ -116,6 +121,8 @@ namespace MicroservicesApp.Services.OrderAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseAzureServiceBusConsumer();
         }
     }
 }

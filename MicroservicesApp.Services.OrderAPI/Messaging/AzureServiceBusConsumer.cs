@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MicroservicesApp.Services.OrderAPI.Messaging
 {
-    public class AzureServiceBusConsumer
+    public class AzureServiceBusConsumer : IAzureServiceBusConsumer
     {
         private readonly OrderRepository _orderRepository;
         private readonly IConfiguration _configuration;

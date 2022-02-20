@@ -162,7 +162,7 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
                 checkoutHeader.CartDetails = cartDto.CartDetails;
                 //Добавить логику передачи сообщения в сервис обработки заказа
                 await _messageBus.PublishMessage(checkoutHeader, "checkoutmessagetopic");
-
+                await _cartRepository.ClearCart(checkoutHeader.UserId);
             }
             catch (Exception ex)
             {

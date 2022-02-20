@@ -17,14 +17,17 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
     {
         private readonly ICartRepository _cartRepository;
         private readonly IMessageBus _messageBus;
+        private readonly ICouponRepository _couponRepository;
         protected ResponseDto _response;
 
         public CartController(
             ICartRepository cartRepository,
-            IMessageBus messageBus)
+            IMessageBus messageBus,
+            ICouponRepository couponRepository)
         {
             _cartRepository = cartRepository;
             _messageBus = messageBus;
+            _couponRepository = couponRepository;
             this._response = new ResponseDto();
         }
 
@@ -143,6 +146,19 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
                 {
                     return BadRequest();
                 }
+                //Проверка изменения размера скидки
+                if (!string.IsNullOrEmpty(checkoutHeader.CouponCode))
+                {
+                    CouponDto coupon = await _couponRepository.GetCoupon(checkoutHeader.CouponCode);
+                    if (checkoutHeader.DiscountTotal != coupon.DiscountAmount)
+                    {
+                        _response.IsSuccess = false;
+                        _response.ErrorMessages = new List<string>() { "Размер купона изменился, хотите продолжить?" };
+                        _response.DisplayMessage = "Размер купона изменился, хотите продолжить?";
+                        return _response;
+                    }
+                }
+
                 checkoutHeader.CartDetails = cartDto.CartDetails;
                 //Добавить логику передачи сообщения в сервис обработки заказа
                 await _messageBus.PublishMessage(checkoutHeader, "checkoutmessagetopic");

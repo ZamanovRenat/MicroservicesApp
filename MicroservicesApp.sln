@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Paymets", "Paymets", "{07EA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroservicesApp.PaymentProcessor", "MicroservicesApp.PaymentProcessor\MicroservicesApp.PaymentProcessor.csproj", "{E39A1A72-5624-4265-88F4-40FBF6D7128A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroservicesApp.Services.PaymentAPI", "MicroservicesApp.Services.PaymentAPI\MicroservicesApp.Services.PaymentAPI.csproj", "{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{E39A1A72-5624-4265-88F4-40FBF6D7128A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E39A1A72-5624-4265-88F4-40FBF6D7128A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E39A1A72-5624-4265-88F4-40FBF6D7128A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{9242D98D-B43E-471D-8806-98431A31D940} = {F68EA8CF-891E-442B-BD1A-E399F0877699}
 		{CDCE3E34-05D3-4769-BB31-6417CB59BD7D} = {60C3AF7A-AF57-438C-9F83-61645E7CD4A6}
 		{E39A1A72-5624-4265-88F4-40FBF6D7128A} = {07EA7304-1600-4793-925C-7F258125FE47}
+		{235A17EC-84B7-47C5-BB85-E3BD0C3C70E6} = {60C3AF7A-AF57-438C-9F83-61645E7CD4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {063830C6-E884-4B24-B59E-82CD4943D4BE}

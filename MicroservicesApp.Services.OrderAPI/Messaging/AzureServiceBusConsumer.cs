@@ -8,6 +8,7 @@ using MicroservicesApp.Services.OrderAPI.Models;
 using MicroservicesApp.Services.OrderAPI.Repository;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace MicroservicesApp.Services.OrderAPI.Messaging
 {
@@ -15,17 +16,45 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
     {
         private readonly OrderRepository _orderRepository;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AzureServiceBusConsumer> _logger;
         private readonly string serviceBusConnectionString;
-        private readonly string subscriptionName;
+        private readonly string subScriptionCheckOut;
         private readonly string checkoutMessageTopic;
-        public AzureServiceBusConsumer(OrderRepository orderRepository, IConfiguration configuration)
+        private ServiceBusProcessor checkOutProcessor;
+        public AzureServiceBusConsumer(
+            OrderRepository orderRepository, 
+            IConfiguration configuration,
+            ILogger<AzureServiceBusConsumer> logger)
         {
             _orderRepository = orderRepository;
             _configuration = configuration;
+            _logger = logger;
 
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
-            subscriptionName = _configuration.GetValue<string>("SubscriptionName");
+            subScriptionCheckOut = _configuration.GetValue<string>("SubscriptionCheckOut");
             checkoutMessageTopic = _configuration.GetValue<string>("CheckoutMessageTopic");
+
+            //Клиент служебной шины
+            var client = new ServiceBusClient(serviceBusConnectionString);
+
+            checkOutProcessor = client.CreateProcessor(checkoutMessageTopic, subScriptionCheckOut);
+        }
+        //Запуск процессора обработки сообщений из Сервисной шины Azure.
+        public async Task Start()
+        {
+            checkOutProcessor.ProcessMessageAsync += OnCheckOutMessageReceived;
+            checkOutProcessor.ProcessErrorAsync += ErrorHandler;
+            await checkOutProcessor.StartProcessingAsync();
+        }
+        public async Task Stop()
+        {
+            await checkOutProcessor.StopProcessingAsync();
+            await checkOutProcessor.DisposeAsync();
+        }
+        Task ErrorHandler(ProcessErrorEventArgs args)
+        {
+            _logger.LogInformation(args.Exception.ToString());
+            return Task.CompletedTask;
         }
         private async Task OnCheckOutMessageReceived(ProcessMessageEventArgs args)
         {

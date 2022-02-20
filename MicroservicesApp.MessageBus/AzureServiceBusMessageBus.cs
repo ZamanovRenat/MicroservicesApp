@@ -9,7 +9,7 @@ namespace MicroservicesApp.MessageBus
     public class AzureServiceBusMessageBus : IMessageBus
     {
         //Можно размести в файлах конфигурации
-        private string connectionString = "Endpoint=sb://microservicesapp.servicebus.windows.net/;SharedAccessKeyName=MicroservicesAppPolitycs;SharedAccessKey=rH5UVyVGufdkoIEH3m3D2mdgX37q25/BbiW7LuidenY=;EntityPath=checkoutmessagetopic";
+        private string connectionString = "Endpoint=sb://microservicesapp.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=UFQiYWIkGMC0V+t4VRSFpM7kQbozqk8LNliMqqWR6eQ=";
 
         public async Task PublishMessage(BaseMessage message, string topicName)
         {

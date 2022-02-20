@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
+using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.OrderAPI.Messages;
 using MicroservicesApp.Services.OrderAPI.Models;
 using MicroservicesApp.Services.OrderAPI.Repository;
@@ -17,22 +18,29 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
         private readonly OrderRepository _orderRepository;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AzureServiceBusConsumer> _logger;
+        private readonly IMessageBus _messageBus;
         private readonly string serviceBusConnectionString;
         private readonly string subScriptionCheckOut;
         private readonly string checkoutMessageTopic;
+        private readonly string orderPaymentProcessTopic;
         private ServiceBusProcessor checkOutProcessor;
+        
         public AzureServiceBusConsumer(
             OrderRepository orderRepository, 
             IConfiguration configuration,
-            ILogger<AzureServiceBusConsumer> logger)
+            ILogger<AzureServiceBusConsumer> logger,
+            IMessageBus messageBus)
+        
         {
             _orderRepository = orderRepository;
             _configuration = configuration;
             _logger = logger;
+            _messageBus = messageBus;
 
             serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
             subScriptionCheckOut = _configuration.GetValue<string>("SubscriptionCheckOut");
             checkoutMessageTopic = _configuration.GetValue<string>("CheckoutMessageTopic");
+            orderPaymentProcessTopic = _configuration.GetValue<string>("OrderPaymentProcessTopics");
 
             //Клиент служебной шины
             var client = new ServiceBusClient(serviceBusConnectionString);
@@ -95,6 +103,26 @@ namespace MicroservicesApp.Services.OrderAPI.Messaging
             }
             //Добавление в БД
             await _orderRepository.AddOrder(orderHeader);
+
+            PaymentRequestMessage paymentRequestMessage = new()
+            {
+                Name = orderHeader.FirstName + " " + orderHeader.LastName,
+                CardNumber = orderHeader.CardNumber,
+                CVV = orderHeader.CVV,
+                ExpiryMonthYear = orderHeader.ExpiryMonthYear,
+                OrderId = orderHeader.OrderHeaderId,
+                OrderTotal = orderHeader.OrderTotal
+            };
+
+            try
+            {
+                await _messageBus.PublishMessage(paymentRequestMessage, orderPaymentProcessTopic);
+                await args.CompleteMessageAsync(args.Message);
+            }
+            catch(Exception e)
+            {
+                _logger.LogInformation("Ошибка публикации сообщений о проведении платежа");
+            }
         }
     }
 }

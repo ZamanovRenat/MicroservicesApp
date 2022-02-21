@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.ShoppingCartAPI.DbContexts;
+using MicroservicesApp.Services.ShoppingCartAPI.RabbitMQSender;
 using MicroservicesApp.Services.ShoppingCartAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +43,7 @@ namespace MicroservicesApp.Services.ShoppingCartAPI
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
+            services.AddSingleton<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
             services.AddControllers();
             services.AddHttpClient<ICouponRepository, CouponRepository>(u => u.BaseAddress =
                 new Uri(Configuration["ServiceUrls:CouponAPI"]));

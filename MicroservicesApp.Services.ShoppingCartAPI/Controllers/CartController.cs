@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MicroservicesApp.MessageBus;
 using MicroservicesApp.Services.ShoppingCartAPI.Messages;
 using MicroservicesApp.Services.ShoppingCartAPI.Models.Dto;
+using MicroservicesApp.Services.ShoppingCartAPI.RabbitMQSender;
 using MicroservicesApp.Services.ShoppingCartAPI.Repository;
 
 namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
@@ -18,16 +19,19 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
         private readonly ICartRepository _cartRepository;
         private readonly IMessageBus _messageBus;
         private readonly ICouponRepository _couponRepository;
+        private readonly IRabbitMQCartMessageSender _rabbitMqCartMessageSender;
         protected ResponseDto _response;
 
         public CartController(
             ICartRepository cartRepository,
             IMessageBus messageBus,
-            ICouponRepository couponRepository)
+            ICouponRepository couponRepository,
+            IRabbitMQCartMessageSender rabbitMQCartMessageSender)
         {
             _cartRepository = cartRepository;
             _messageBus = messageBus;
             _couponRepository = couponRepository;
+            _rabbitMqCartMessageSender = rabbitMQCartMessageSender;
             this._response = new ResponseDto();
         }
 
@@ -160,8 +164,11 @@ namespace MicroservicesApp.Services.ShoppingCartAPI.Controllers
                 }
 
                 checkoutHeader.CartDetails = cartDto.CartDetails;
-                //Добавить логику передачи сообщения в сервис обработки заказа
-                await _messageBus.PublishMessage(checkoutHeader, "checkoutqueue");
+                //Логика передачи сообщения в Azure Service Bus
+                //await _messageBus.PublishMessage(checkoutHeader, "checkoutqueue");
+
+                //rabbitMQ
+                _rabbitMqCartMessageSender.SendMessage(checkoutHeader, "checkoutqueue");
                 await _cartRepository.ClearCart(checkoutHeader.UserId);
             }
             catch (Exception ex)
